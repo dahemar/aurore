@@ -13,10 +13,10 @@ body {
 @font-face {
   font-family: "FairyDustB";
   src: url("fonts/FairyDustB.woff2") format("woff2");
-       url("fonts/FairyDustB.woff") format("woff");
+  /* url("fonts/FairyDustB.woff") format("woff"); */
   font-weight: normal;
   font-style: normal;
-  font-display:swap;
+  font-display: swap;
 }
 
 .cursive-glow {
@@ -268,9 +268,9 @@ figure {
 }
 
 .poem {
-  line-height: 1.2;       /* Tight line spacing within the poem */
-  margin-bottom: 40px;    /* Space between poems */
-  white-space: pre-line;  /* Keeps line breaks if using <div> */
+  line-height: 1.2; /* Tight line spacing within the poem */
+  margin-bottom: 40px; /* Space between poems */
+  white-space: pre-line; /* Keeps line breaks if using <div> */
 }
 
 #fly {
@@ -284,7 +284,7 @@ figure {
 }
 
 img {
-  filter: brightness(0.95) contrast(1.0) saturate(0.2);
+  filter: brightness(0.95) contrast(1) saturate(0.2);
   filter: sepia(10%) grayscale(5%) blur(0.3px);
   opacity: 0.96;
 }
