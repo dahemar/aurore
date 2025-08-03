@@ -12,7 +12,7 @@ body {
 
 @font-face {
   font-family: "FairyDustB";
-  src: url("public/fonts/FairydustB.woff2") format("woff2");
+  src: url("fonts/FairydustB.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
