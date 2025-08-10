@@ -7,6 +7,8 @@ import FloatingGallery from './components/FloatingGallery'
 import Lightbox from './components/Lightbox'
 import HoverTrail from './components/HoverTrail'
 
+const base = import.meta.env.BASE_URL
+
 function AudioPlayer() {
   const audioRef = useRef(null)
   const [src, setSrc] = useState('')
