@@ -108,7 +108,8 @@ function Layout({ children }) {
   const isHome = location.pathname === '/'
 
   const sfxRef = useRef(null)
-  const sfxFiles = useRef(['/audio/1.m4a', '/audio/2.m4a', '/audio/3.m4a'])
+  const base = import.meta.env.BASE_URL
+  const sfxFiles = useRef([`${base}audio/1.m4a`, `${base}audio/2.m4a`, `${base}audio/3.m4a`])
   const sfxIndex = useRef(0)
   const homeImgRef = useRef(null)
 
@@ -157,7 +158,7 @@ function Layout({ children }) {
   return (
     <>
       <button className="home-logo" onClick={onLogoClick} style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer' }}>
-        <img ref={homeImgRef} src="/images/orchidd.jpg" alt="Home" />
+        <img ref={homeImgRef} src={`${base}images/orchidd.jpg`} alt="Home" />
       </button>
       <div className="main-content">{children}</div>
       <audio ref={sfxRef} style={{ display: 'none' }} />
@@ -168,8 +169,8 @@ function Layout({ children }) {
 function SongSelect() {
   const options = [
     { value: '', label: 'chansons' },
-    { value: '/audio/song1.wav', label: 'Stray' },
-    { value: '/audio/song2.wav', label: 'deep Forest' },
+    { value: `${base}audio/song1.wav`, label: 'Stray' },
+    { value: `${base}audio/song2.wav`, label: 'deep Forest' },
   ]
   const onChange = (e) => {
     const selected = e.target.value
@@ -235,7 +236,7 @@ function Page1() {
           <button type="submit">Envoyer</button>
         </form>
       </div>
-      <img src="/images/19669_221989538788_6246420_n.jpg" height="200" style={{ marginTop: 50 }} />
+      <img src={`${base}images/19669_221989538788_6246420_n.jpg`} height="200" style={{ marginTop: 50 }} />
       <Checklist />
       <SongSelect />
     </Layout>
@@ -267,7 +268,7 @@ function Page3() {
           <Typewriter text="A la lisière du rêve et du mythe, de l'humain et de l'autre" />
         </div>
       </div>
-      <img src="/images/P1082181.JPG" height="600" style={{ margin: '40px 5px 5px 5px' }} />
+      <img src={`${base}images/P1082181.JPG`} height="600" style={{ margin: '40px 5px 5px 5px' }} />
       <Checklist />
       <SongSelect />
     </Layout>

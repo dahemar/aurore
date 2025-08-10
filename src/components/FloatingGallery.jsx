@@ -102,19 +102,19 @@ export default function FloatingGallery() {
       style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'visible', cursor: 'grab', margin: '0 auto', padding: 0 }}
     >
       <figure style={{ ...figStyle, top: '10%', left: '20%' }}>
-        <img src="/images/610c1761-8c76-4285-99ae-10ce1a644614.jpg" alt="" draggable={false} style={imgStyle} />
+        <img src={`${import.meta.env.BASE_URL}images/610c1761-8c76-4285-99ae-10ce1a644614.jpg`} alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>But the trees spread darkness for a wandering beam of sun</figcaption>
       </figure>
       <figure className="big-figure" style={{ ...bigStyle, top: '50%', left: '60%' }}>
-        <img src="/images/38340221-c73f-4f8a-a87a-3a18bcc629a6.jpg" alt="" draggable={false} style={imgStyle} />
+        <img src={`${import.meta.env.BASE_URL}images/38340221-c73f-4f8a-a87a-3a18bcc629a6.jpg`} alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyleBig}>The Sick Garden</figcaption>
       </figure>
       <figure style={{ ...figStyle, top: '30%', left: '10%' }}>
-        <img src="/images/frog.jpeg" alt="" draggable={false} style={imgStyle} />
+        <img src={`${import.meta.env.BASE_URL}images/frog.jpeg`} alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>In memoriam</figcaption>
       </figure>
       <figure style={{ ...figStyle, top: '70%', left: '40%' }}>
-        <img src="/images/P1082183.JPG" alt="" draggable={false} style={imgStyle} />
+        <img src={`${import.meta.env.BASE_URL}images/P1082183.JPG`} alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>Sacrifice</figcaption>
       </figure>
     </div>
