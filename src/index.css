@@ -1,7 +1,7 @@
 body {
   font-size: 20px;
   font-family: FairyDustB;
-  background-image: url("/src/assets/images/background.jpg");
+  background-image: url("./assets/images/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -11,7 +11,7 @@ body {
 
 @font-face {
   font-family: "FairyDustB";
-  src: url("/src/assets/fonts/FairydustB.woff") format("woff");
+  src: url("./assets/fonts/FairydustB.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -128,8 +128,8 @@ html, body { overflow-x: hidden; }
   .simple-dropdown { text-align: center; margin-top: 24px; margin: 16px auto 0 auto; }
   #lightbox-image { max-width: 92vw; max-height: 70vh; }
   .floating-gallery { width: 100%; margin: 0 auto; }
-  .floating-gallery figure { width: 42vw; }
-  .floating-gallery figure.big-figure { width: 52vw; }
+  .floating-gallery figure { width: 32vw; }
+  .floating-gallery figure.big-figure { width: 42vw; }
   .content-box { margin: 12px auto; padding: 14px; width: 92vw; text-align: center; transform: translateX(-22px); }
   .content-box img { display: block; margin: 12px auto; max-width: 100%; height: auto; }
   .poem, blockquote { margin-left: auto; margin-right: auto; max-width: 92vw; }
@@ -142,8 +142,8 @@ html, body { overflow-x: hidden; }
   .home-logo img { width: 64px; }
   .cursive-glow { padding-top: 56px; }
   .simple-dropdown select { font-size: 14px; padding: 8px 10px; }
-  .floating-gallery figure { width: 38vw; }
-  .floating-gallery figure.big-figure { width: 48vw; }
+  .floating-gallery figure { width: 28vw; }
+  .floating-gallery figure.big-figure { width: 38vw; }
 }
 
 /* Home specific mobile background zoom */

@@ -41,8 +41,13 @@ export default function Flies({ enabled = true, activateOnClick = false }) {
     function start() {
       if (startedRef.current) return
       startedRef.current = true
-      document.querySelectorAll('img.fly').forEach((fly) => moveOnce(fly))
+      // Start with a small delay to ensure flies are created
+      setTimeout(() => {
+        document.querySelectorAll('img.fly').forEach((fly) => moveOnce(fly))
+      }, 100)
     }
+
+
 
     function destroyFlies() {
       timersRef.current.forEach(clearTimeout)
