@@ -13,28 +13,37 @@ export default function FloatingGallery({ items }) {
     // Randomize initial positions of all figures on each load
     const randomizePositions = () => {
       const figures = gallery.querySelectorAll('figure')
+      const positions = []
+      const isMobile = window.innerWidth <= 768
+      const minDistance = isMobile ? 120 : 160
+      const viewportH = window.innerHeight
+      const canvasH = isMobile ? Math.round(viewportH * 1.1) : viewportH
+      gallery.style.height = `${canvasH}px`
+
       figures.forEach((fig) => {
         const isBig = fig.classList.contains('big-figure')
         const approxWidth = isBig ? 350 : 250
-        const safeMargin = 80
+        const safeMargin = isMobile ? 40 : 80
         const maxX = Math.max(0, window.innerWidth - approxWidth - safeMargin)
-        const maxY = Math.max(0, window.innerHeight - 220) // rough estimate for height
-        
-        // Use a more centered distribution instead of uniform random
-        // This creates a bell curve effect that tends toward the center
-        const centerX = window.innerWidth / 2
-        const centerY = window.innerHeight / 2 - 110 // Adjust for header height
-        
-        // Generate random values with a normal-like distribution
-        const randomX = (Math.random() + Math.random() + Math.random()) / 3 // Creates a bell curve
-        const randomY = (Math.random() + Math.random() + Math.random()) / 3
-        
-        // Apply the distribution around the center
-        const left = centerX + (randomX - 0.5) * (maxX * 0.6) // 60% of max range for more centering
-        const top = centerY + (randomY - 0.5) * (maxY * 0.6)
-        
+        const maxY = Math.max(0, canvasH - 300)
+
+        let attempts = 0
+        let validPosition = false
+        let left, top
+
+        while (!validPosition && attempts < 200) {
+          left = Math.random() * maxX
+          top = Math.random() * maxY
+          validPosition = positions.every(pos => {
+            const distance = Math.hypot(left - pos.left, top - pos.top)
+            return distance >= minDistance
+          })
+          attempts++
+        }
+
         fig.style.left = `${Math.max(safeMargin, Math.min(left, maxX))}px`
         fig.style.top = `${Math.max(safeMargin, Math.min(top, maxY))}px`
+        positions.push({ left, top })
       })
     }
 
@@ -82,7 +91,7 @@ export default function FloatingGallery({ items }) {
       // Allow negative values to go beyond left and top edges
       // Only limit extreme values to prevent images from going too far off-screen
       newX = Math.max(-200, Math.min(newX, window.innerWidth - 50))
-      newY = Math.max(-200, Math.min(newY, window.innerHeight - 50))
+      newY = Math.max(-200, Math.min(newY, window.innerHeight * 1.1 - 50))
       
       state.targetX = newX
       state.targetY = newY
@@ -120,8 +129,8 @@ export default function FloatingGallery({ items }) {
     }
   }, [])
 
-  const figStyle = { position: 'absolute', width: 250, margin: 0, cursor: 'grab', userSelect: 'none' }
-  const bigStyle = { ...figStyle, width: 350 }
+  const figStyle = { position: 'absolute', width: 'clamp(120px, 28vw, 250px)', margin: 0, cursor: 'grab', userSelect: 'none' }
+  const bigStyle = { ...figStyle, width: 'clamp(150px, 34vw, 350px)' }
   const imgStyle = { width: '100%', height: 'auto', display: 'block', pointerEvents: 'none' }
   const capStyle = { color: '#fff', textShadow: '0 1px 2px #000', background: 'rgba(0,0,0,0.35)', padding: '4px 6px', borderRadius: 4, fontSize: '1.1rem' }
   const capStyleBig = { ...capStyle, fontSize: '1.3rem', fontWeight: 'bold' }
@@ -135,12 +144,13 @@ export default function FloatingGallery({ items }) {
 
   const renderItems = (items && items.length ? items : defaultItems)
 
+  const isMobileRender = typeof window !== 'undefined' && window.innerWidth <= 768
   return (
     <div
       className="floating-gallery"
       id="floating-gallery"
       ref={galleryRef}
-      style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'visible', cursor: 'grab', margin: '0 auto', padding: 0 }}
+      style={{ position: 'relative', width: '100%', height: isMobileRender ? '110vh' : '100vh', overflow: 'visible', cursor: 'grab', margin: '0 auto', padding: 0 }}
     >
       {renderItems.map((item, idx) => {
         const isBig = String(item.size).toLowerCase() === 'big'

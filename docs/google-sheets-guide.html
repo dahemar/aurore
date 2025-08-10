@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google Sheets CMS Guide – Aurore</title>
+  <style>
+    :root { --text:#111; --muted:#666; --accent:#6b46c1; }
+    * { box-sizing: border-box; }
+    body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif; color: var(--text); margin: 24px; }
+    h1,h2,h3 { line-height: 1.25; margin: 1.2em 0 0.5em; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; background: #f7f7f9; }
+    code { padding: 0 4px; border-radius: 3px; }
+    pre { padding: 10px; border-radius: 6px; overflow: auto; }
+    ul { margin: .5em 0 .8em 1.2em; }
+    .muted { color: var(--muted); }
+    .toc a { color: var(--accent); text-decoration: none; }
+    .box { border: 1px solid #eee; border-radius: 8px; padding: 12px 14px; margin: 10px 0; background: #fff; }
+
+    @media print {
+      body { margin: 10mm; }
+      a { color: black; text-decoration: none; }
+      .box { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Google Sheets CMS Guide for Aurore</h1>
+  <p class="muted">How to edit website content using a public Google Sheet.</p>
+
+  <div class="box">
+    <h2>Quick links</h2>
+    <ul>
+      <li>Spreadsheet: add your link (e.g., <code>https://docs.google.com/...</code>)</li>
+      <li>Tabs: <code>page1_je_mappelle_aurore</code>, <code>page2_topographie_etrange</code>, <code>page3_reliques_reve</code>, <code>page4_memoires_mont_songe</code></li>
+    </ul>
+  </div>
+
+  <h2>1) Visibility</h2>
+  <ul>
+    <li>Share → General access → Anyone with the link (Viewer)</li>
+    <li>No backend required; the app reads CSV exports of each tab</li>
+  </ul>
+
+  <h2>2) Tab schemas</h2>
+  <h3>page2_topographie_etrange</h3>
+  <ul>
+    <li><code>image_url</code> – public image URL</li>
+    <li><code>caption</code> – short text</li>
+    <li><code>size</code> – <code>normal</code> or <code>big</code></li>
+  </ul>
+  <p class="muted">Positions are randomized; coordinates are not read from the sheet.</p>
+
+  <h3>page4_memoires_mont_songe</h3>
+  <ul>
+    <li><code>text_type</code> – <code>introductory_quote</code> | <code>main_content</code></li>
+    <li><code>content</code> – text; line breaks are preserved</li>
+  </ul>
+
+  <h2>3) Images</h2>
+  <ul>
+    <li>Host in <code>react-app/public/images</code> and reference via <code>${BASE_URL}images/&lt;file&gt;</code>, or use an external host</li>
+    <li>Recommended width: 800–1600px (JPG/WEBP)</li>
+  </ul>
+
+  <h2>4) How it works</h2>
+  <pre>https://docs.google.com/spreadsheets/d/&lt;SHEET_ID&gt;/gviz/tq?tqx=out:csv&amp;sheet=&lt;TAB_NAME&gt;</pre>
+  <p>Frontend hook: <code>useSheetData('&lt;tab_name&gt;')</code>. Refresh the page to see edits immediately.</p>
+
+  <h2>5) Editing steps</h2>
+  <ol>
+    <li>Open the sheet → select tab</li>
+    <li>Edit only the required columns</li>
+    <li>Keep the first row as headers</li>
+    <li>Reload the site page</li>
+  </ol>
+
+  <h2>6) Troubleshooting</h2>
+  <ul>
+    <li>Empty page → check tab names exactly</li>
+    <li>No image → the URL must be public and direct</li>
+    <li>No line breaks in the quote → use real line breaks in the cell</li>
+  </ul>
+
+  <h2>7) Export to PDF</h2>
+  <p>Use your browser’s Print → Save as PDF. This page is formatted for A4 printing.</p>
+</body>
+</html> 
