@@ -35,9 +35,9 @@ body {
 
 .checklist li { margin-bottom: 15px; }
 
-h1 { color: rgb(246, 236, 248); margin-left: 50px; }
+h1 { color: rgb(246, 236, 248); margin: 0 auto; text-align: center; }
 
-h2 { color: rgb(180, 170, 189); margin-left: 50px; }
+h2 { color: rgb(180, 170, 189); margin: 0 auto; text-align: center; }
 
 .type-container { width: 100%; overflow: hidden; position: relative; }
 .type-h2 { display: inline-block; white-space: nowrap; position: relative; }
@@ -128,9 +128,9 @@ html, body { overflow-x: hidden; }
   .simple-dropdown { text-align: center; margin-top: 24px; margin: 16px auto 0 auto; }
   #lightbox-image { max-width: 92vw; max-height: 70vh; }
   .floating-gallery { width: 100%; margin: 0 auto; }
-  .floating-gallery figure { width: 60vw; left: auto; right: auto; }
-  .floating-gallery figure.big-figure { width: 72vw; }
-  .content-box { margin: 12px auto; padding: 14px; width: 92vw; text-align: center; }
+.floating-gallery figure { width: 60vw; }
+.floating-gallery figure.big-figure { width: 72vw; }
+  .content-box { margin: 12px auto; padding: 14px; width: 92vw; text-align: center; transform: translateX(-22px); }
   .content-box img { display: block; margin: 12px auto; max-width: 100%; height: auto; }
   .poem, blockquote { margin-left: auto; margin-right: auto; max-width: 92vw; }
   img { max-width: 100%; height: auto; }
@@ -163,7 +163,7 @@ html, body { overflow-x: hidden; }
   h1 { margin: 8px auto; }
   h2 { margin: 6px auto; }
   .main-column { margin-left: 0 !important; padding: 12px; max-width: 92vw; margin-right: auto; margin-left: auto; }
-  .poem { width: 92vw; margin-left: auto; margin-right: auto; }
+  .poem { width: 92vw; margin-left: auto; margin-right: auto; transform: translateX(-8px); }
 }
 
 /* Remove any sidebar layout impact */

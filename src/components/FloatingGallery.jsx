@@ -13,15 +13,16 @@ export default function FloatingGallery() {
       const isTouch = e.type.startsWith('touch')
       const pointer = isTouch ? e.touches[0] : e
       const fig = document.elementFromPoint(pointer.clientX, pointer.clientY)?.closest('figure')
-      if (!fig) return
+      if (!fig || !gallery.contains(fig)) return
       state.draggingFigure = fig
       const rect = fig.getBoundingClientRect()
+      const galleryRect = gallery.getBoundingClientRect()
       state.offsetX = pointer.clientX - rect.left
       state.offsetY = pointer.clientY - rect.top
       fig.style.cursor = 'grabbing'
       fig.style.zIndex = String(++state.zTop)
-      state.targetX = rect.left
-      state.targetY = rect.top
+      state.targetX = rect.left - galleryRect.left
+      state.targetY = rect.top - galleryRect.top
       state.currentX = state.targetX
       state.currentY = state.targetY
 
@@ -40,8 +41,19 @@ export default function FloatingGallery() {
       if (!state.draggingFigure) return
       const isTouch = e.type.startsWith('touch')
       const pointer = isTouch ? e.touches[0] : e
-      state.targetX = pointer.clientX - state.offsetX
-      state.targetY = pointer.clientY - state.offsetY
+      const galleryRect = gallery.getBoundingClientRect()
+      
+      // Allow images to go beyond container boundaries
+      let newX = pointer.clientX - galleryRect.left - state.offsetX
+      let newY = pointer.clientY - galleryRect.top - state.offsetY
+      
+      // Allow negative values to go beyond left and top edges
+      // Only limit extreme values to prevent images from going too far off-screen
+      newX = Math.max(-200, Math.min(newX, window.innerWidth - 50))
+      newY = Math.max(-200, Math.min(newY, window.innerHeight - 50))
+      
+      state.targetX = newX
+      state.targetY = newY
       if (isTouch) e.preventDefault()
     }
 
@@ -76,27 +88,32 @@ export default function FloatingGallery() {
     }
   }, [])
 
-  const figStyle = { position: 'fixed', width: 250, margin: 0, cursor: 'grab', userSelect: 'none', left: '20%', top: '10%' }
-  const bigStyle = { position: 'fixed', width: 350, margin: 0, cursor: 'grab', userSelect: 'none', left: '60%', top: '50%' }
+  const figStyle = { position: 'absolute', width: 250, margin: 0, cursor: 'grab', userSelect: 'none' }
+  const bigStyle = { ...figStyle, width: 350 }
   const imgStyle = { width: '100%', height: 'auto', display: 'block', pointerEvents: 'none' }
   const capStyle = { color: '#fff', textShadow: '0 1px 2px #000', background: 'rgba(0,0,0,0.35)', padding: '4px 6px', borderRadius: 4, fontSize: '1.1rem' }
   const capStyleBig = { ...capStyle, fontSize: '1.3rem', fontWeight: 'bold' }
 
   return (
-    <div className="floating-gallery" id="floating-gallery" ref={galleryRef} style={{ position: 'fixed', inset: 0, overflow: 'visible', pointerEvents: 'auto' }}>
-      <figure style={{ ...figStyle }}>
+    <div
+      className="floating-gallery"
+      id="floating-gallery"
+      ref={galleryRef}
+      style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'visible', cursor: 'grab', margin: '0 auto', padding: 0 }}
+    >
+      <figure style={{ ...figStyle, top: '10%', left: '20%' }}>
         <img src="/images/610c1761-8c76-4285-99ae-10ce1a644614.jpg" alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>But the trees spread darkness for a wandering beam of sun</figcaption>
       </figure>
-      <figure className="big-figure" style={{ ...bigStyle }}>
+      <figure className="big-figure" style={{ ...bigStyle, top: '50%', left: '60%' }}>
         <img src="/images/38340221-c73f-4f8a-a87a-3a18bcc629a6.jpg" alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyleBig}>The Sick Garden</figcaption>
       </figure>
-      <figure style={{ position: 'fixed', width: 250, margin: 0, cursor: 'grab', userSelect: 'none', left: '10%', top: '30%' }}>
+      <figure style={{ ...figStyle, top: '30%', left: '10%' }}>
         <img src="/images/frog.jpeg" alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>In memoriam</figcaption>
       </figure>
-      <figure style={{ position: 'fixed', width: 250, margin: 0, cursor: 'grab', userSelect: 'none', left: '40%', top: '70%' }}>
+      <figure style={{ ...figStyle, top: '70%', left: '40%' }}>
         <img src="/images/P1082183.JPG" alt="" draggable={false} style={imgStyle} />
         <figcaption style={capStyle}>Sacrifice</figcaption>
       </figure>

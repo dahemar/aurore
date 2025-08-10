@@ -52,11 +52,17 @@ function AudioPlayer() {
 function LayoutShell({ children }) {
   const location = useLocation()
   const isHome = location.pathname === '/'
+  
   useEffect(() => {
     // Keep body.home in sync for mobile-specific styles
     if (isHome) document.body.classList.add('home')
     else document.body.classList.remove('home')
   }, [isHome])
+  
+  useEffect(() => {
+    // Scroll to top when route changes
+    window.scrollTo(0, 0)
+  }, [location.pathname])
   return (
     <div className="container cursive-glow">
       <HoverTrail />
