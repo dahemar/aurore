@@ -13,7 +13,7 @@ export default function Flies({ enabled = true, activateOnClick = false }) {
       createdRef.current = true
       for (let i = 0; i < NUM_FLIES; i++) {
         const fly = document.createElement('img')
-        fly.src = '/images/fly.gif'
+        fly.src = `${import.meta.env.BASE_URL}images/fly.gif`
         fly.style.position = 'fixed'
         fly.style.top = '0'
         fly.style.left = '0'
