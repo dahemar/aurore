@@ -1,5 +1,5 @@
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Flies from './components/Flies'
 import Typewriter from './components/Typewriter'
@@ -14,8 +14,6 @@ const base = import.meta.env.BASE_URL
 function AudioPlayer() {
   const audioRef = useRef(null)
   const [src, setSrc] = useState('')
-  const [isPlaying, setIsPlaying] = useState(false)
-
   useEffect(() => {
     const savedSrc = localStorage.getItem('audioSrc') || ''
     const savedTime = parseFloat(localStorage.getItem('audioTime') || '0')
@@ -31,13 +29,12 @@ function AudioPlayer() {
       audio.addEventListener('loadedmetadata', onLoaded, { once: true })
     }
   }, [])
-
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
     const onTime = () => { localStorage.setItem('audioTime', String(audio.currentTime)) }
-    const onPlay = () => { localStorage.setItem('audioSrc', audio.src); localStorage.setItem('audioPlaying', 'true'); setIsPlaying(true) }
-    const onPause = () => { localStorage.setItem('audioPlaying', 'false'); setIsPlaying(false) }
+    const onPlay = () => { localStorage.setItem('audioSrc', audio.src); localStorage.setItem('audioPlaying', 'true') }
+    const onPause = () => { localStorage.setItem('audioPlaying', 'false') }
     audio.addEventListener('timeupdate', onTime)
     audio.addEventListener('play', onPlay)
     audio.addEventListener('pause', onPause)
@@ -47,26 +44,17 @@ function AudioPlayer() {
       audio.removeEventListener('pause', onPause)
     }
   }, [])
-
-  return (
-    <audio id="audio-player" ref={audioRef} preload="metadata" controls style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000, width: 250, height: 30 }} />
-  )
+  return <audio id="audio-player" ref={audioRef} preload="metadata" controls style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000, width: 250, height: 30 }} />
 }
 
 function LayoutShell({ children }) {
   const location = useLocation()
   const isHome = location.pathname === '/'
-  
   useEffect(() => {
-    // Keep body.home in sync for mobile-specific styles
     if (isHome) document.body.classList.add('home')
     else document.body.classList.remove('home')
   }, [isHome])
-  
-  useEffect(() => {
-    // Scroll to top when route changes
-    window.scrollTo(0, 0)
-  }, [location.pathname])
+  useEffect(() => { window.scrollTo(0, 0) }, [location.pathname])
   return (
     <div className="container cursive-glow">
       <HoverTrail />
@@ -90,17 +78,12 @@ function Checklist() {
   return (
     <div className="checklist">
       <ul>
-        {items.map((it) => {
-          const isActive = path === it.to
-          return (
-            <li key={it.id}>
-              <input type="checkbox" id={it.id} defaultChecked={isActive} />
-              <label htmlFor={it.id}>
-                <Link to={it.to}>{it.label}</Link>
-              </label>
-            </li>
-          )
-        })}
+        {items.map((it) => (
+          <li key={it.id}>
+            <input type="checkbox" id={it.id} defaultChecked={path === it.to} />
+            <label htmlFor={it.id}><Link to={it.to}>{it.label}</Link></label>
+          </li>
+        ))}
       </ul>
     </div>
   )
@@ -110,12 +93,10 @@ function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const isHome = location.pathname === '/'
-
   const sfxRef = useRef(null)
+  const homeImgRef = useRef(null)
   const sfxFiles = useRef([`${base}audio/1.m4a`, `${base}audio/2.m4a`, `${base}audio/3.m4a`])
   const sfxIndex = useRef(0)
-  const homeImgRef = useRef(null)
-
   function playNextSfx() {
     const audio = sfxRef.current
     if (!audio) return
@@ -124,40 +105,21 @@ function Layout({ children }) {
     audio.src = files[idx]
     sfxIndex.current += 1
     audio.loop = false
-    try {
-      audio.pause()
-      audio.currentTime = 0
-      audio.load()
-      audio.play().catch(() => {})
-    } catch {}
+    try { audio.pause(); audio.currentTime = 0; audio.load(); audio.play().catch(() => {}) } catch {}
   }
-
   useEffect(() => {
     const sfx = sfxRef.current
     if (!sfx) return
-    const onEnded = () => {
-      if (sfxIndex.current % sfxFiles.current.length !== 0) {
-        playNextSfx()
-      }
-    }
+    const onEnded = () => { if (sfxIndex.current % sfxFiles.current.length !== 0) playNextSfx() }
     sfx.addEventListener('ended', onEnded)
     return () => sfx.removeEventListener('ended', onEnded)
   }, [])
-
   const onLogoClick = (e) => {
     const img = homeImgRef.current
-    if (img) {
-      img.classList.add('glow')
-      setTimeout(() => img.classList.remove('glow'), 400)
-    }
-    if (!isHome) {
-      navigate('/')
-      return
-    }
-    e.preventDefault()
-    playNextSfx()
+    if (img) { img.classList.add('glow'); setTimeout(() => img.classList.remove('glow'), 400) }
+    if (!isHome) { navigate('/'); return }
+    e.preventDefault(); playNextSfx()
   }
-
   return (
     <>
       <button className="home-logo" onClick={onLogoClick} style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer' }}>
@@ -178,54 +140,51 @@ function SongSelect() {
   const onChange = (e) => {
     const selected = e.target.value
     const audio = document.getElementById('audio-player')
-    if (selected && audio) {
-      try {
-        audio.pause()
-        audio.src = selected
-        audio.load()
-        audio.play().catch(() => {})
-      } catch {}
-    }
+    if (selected && audio) { try { audio.pause(); audio.src = selected; audio.load(); audio.play().catch(() => {}) } catch {} }
   }
   return (
     <div className="simple-dropdown">
       <select id="tech-select" onChange={onChange}>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
+        {options.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
       </select>
     </div>
   )
 }
 
-function Home() {
-  return (
-    <Layout>
-      <Checklist />
-      <SongSelect />
-    </Layout>
-  )
-}
-
+function Home() { return (<Layout><Checklist /><SongSelect /></Layout>) }
 function Page1() {
+  const { data } = useSheetData('page1_je_mappelle_aurore')
+  const first = Array.isArray(data) && data.length > 0 ? data[0] : null
+  const title = first?.title || "Je m'appelle Aurore Delune"
+  const subtitle = first?.content || 'Comment vous appelez-vous ?'
+  const imageUrl = first?.image_url ? processImageUrl(first.image_url) : `${base}images/19669_221989538788_6246420_n.jpg`
+  const formTitle = first?.form_title || ''
+  const formDescription = first?.form_description || ''
+
   const onSubmit = (e) => {
     e.preventDefault()
-    const name = e.target.name.value.trim()
-    const email = e.target.email.value.trim()
-    const message = e.target.message.value.trim()
+    const name = e.currentTarget.elements.name.value.trim()
+    const email = e.currentTarget.elements.email.value.trim()
+    const message = e.currentTarget.elements.message.value.trim()
     const body = `${name}\n${email}\n\n${message}`
-    const mailtoLink = `mailto:dawn.ng@outlook.com?subject=Website%20Contact&body=${encodeURIComponent(body)}`
-    window.location.href = mailtoLink
+    const mailto = `mailto:dawn.ng@outlook.com?subject=${encodeURIComponent('Website')}&body=${encodeURIComponent(body)}`
+    window.location.href = mailto
   }
 
   return (
     <Layout>
       <div className="content-box">
-        <h1>Je m'appelle Aurore Delune</h1>
-        <h2>Comment vous appelez-vous ?</h2>
-        <form onSubmit={onSubmit} id="contactForm">
+        <h1>{title}</h1>
+        {subtitle && (
+          <div className="type-container">
+            <Typewriter text={subtitle} />
+          </div>
+        )}
+
+        {formTitle && <h2>{formTitle}</h2>}
+        {formDescription && <p>{formDescription}</p>}
+
+        <form id="contactForm" onSubmit={onSubmit}>
           <label htmlFor="name">Votre nom :</label><br />
           <input type="text" id="name" name="name" required /><br /><br />
 
@@ -239,73 +198,70 @@ function Page1() {
           <button type="submit">Envoyer</button>
         </form>
       </div>
-      <img src={`${base}images/19669_221989538788_6246420_n.jpg`} height="200" style={{ marginTop: 50 }} />
+
+      {imageUrl && (
+        <img src={imageUrl} height="200" style={{ marginTop: 50 }} alt="" />
+      )}
+
       <Checklist />
       <SongSelect />
     </Layout>
   )
 }
-
-function Page2() {
-  const { data } = useSheetData('page2_topographie_etrange')
-  const items = (data || []).map((row) => ({
-    src: processImageUrl(row.image_url),
-    caption: row.caption,
-    size: row.size || 'normal',
-  }))
-  return (
-    <Layout>
-      <div className="content-box">
-        <h1>Topographie de l'étrange</h1>
-        <div className="type-container">
-          <Typewriter text="Du sacré dans le profane, de la beauté dans la décrépitude" />
-        </div>
-      </div>
-      <FloatingGallery items={items} />
-      <Checklist />
-      <SongSelect />
-    </Layout>
-  )
-}
-
+function Page2() { return (<Layout><div className="content-box"><h1>Topographie de l'étrange</h1><div className="type-container"><Typewriter text="Du sacré dans le profane, de la beauté dans la décrépitude" /></div></div><FloatingGallery /><Checklist /><SongSelect /></Layout>) }
 function Page3() {
+  const { data } = useSheetData('page3_reliques_reve')
+  const row = Array.isArray(data) && data.length > 0 ? data[0] : null
+  const title = row?.title || 'Reliques du rêve'
+  const typewriterText = row?.content || "A la lisière du rêve et du mythe, de l'humain et de l'autre"
+  const imageUrl = row?.image_url ? processImageUrl(row.image_url) : `${base}images/P1082181.JPG`
   return (
     <Layout>
       <div className="content-box">
-        <h1>Reliques du rêve</h1>
-        <div className="type-container">
-          <Typewriter text="A la lisière du rêve et du mythe, de l'humain et de l'autre" />
+        <div className="main-content">
+          <h1>{title}</h1>
+          <div className="type-container">
+            <Typewriter text={typewriterText} />
+          </div>
+
+          {imageUrl && (
+            <img src={imageUrl} height="600" style={{ margin: '40px 5px 5px 5px' }} alt="" />
+          )}
+        </div>
+        <div className="checklist">
+          <Checklist />
+        </div>
+        <div className="simple-dropdown">
+          <SongSelect />
         </div>
       </div>
-      <img src={`${base}images/P1082181.JPG`} height="600" style={{ margin: '40px 5px 5px 5px' }} />
-      <Checklist />
-      <SongSelect />
     </Layout>
   )
 }
-
 function Page4() {
   const { data } = useSheetData('page4_memoires_mont_songe')
   const rows = Array.isArray(data) ? data : []
-
-  // Usar el esquema text_type:introductory_quote/main_content
   const typedIntro = rows.find((r) => String(r.text_type).toLowerCase() === 'introductory_quote')
   const typedMain = rows.find((r) => String(r.text_type).toLowerCase() === 'main_content')
-
   const introContent = typedIntro?.content || ''
   const mainContent = typedMain?.content || ''
-
   return (
     <Layout>
       <div className="content-box">
         <h1>Mémoires du Mont Songe</h1>
         {introContent && (
           <blockquote>
-            <p style={{ whiteSpace: 'pre-line' }}>{introContent}</p>
+            <p>
+              {introContent.split(/\n/).map((line, idx) => (
+                <span key={idx}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
           </blockquote>
         )}
       </div>
-
       {mainContent && (
         <div className="poem">
           <blockquote>
