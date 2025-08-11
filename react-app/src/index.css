@@ -34,6 +34,7 @@ body {
 }
 
 .checklist li { margin-bottom: 15px; }
+.checklist label { padding-left: 8px; /* Añadir más espacio entre checkbox y texto */ }
 
 h1 { color: rgb(246, 236, 248); margin: 0 auto; text-align: center; }
 
@@ -128,9 +129,9 @@ html, body { overflow-x: hidden; }
   .simple-dropdown { text-align: center; margin-top: 24px; margin: 16px auto 0 auto; }
   #lightbox-image { max-width: 92vw; max-height: 70vh; }
   .floating-gallery { width: 100%; margin: 0 auto; }
-  .floating-gallery figure { width: 42vw; }
-  .floating-gallery figure.big-figure { width: 50vw; }
-  .content-box { margin: 12px auto; padding: 14px; width: 92vw; text-align: center; transform: translateX(-22px); }
+  .floating-gallery figure { width: 45vw; /* Aumentado de 30vw a 45vw (50% más grande) */ }
+  .floating-gallery figure.big-figure { width: 52.5vw; /* Aumentado de 35vw a 52.5vw (50% más grande) */ }
+  .content-box { margin: 12px auto; padding: 14px; width: 92vw; text-align: center; transform: translateX(-38px); }
   .content-box img { display: block; margin: 12px auto; max-width: 100%; height: auto; }
   .poem, blockquote { margin-left: auto; margin-right: auto; max-width: 92vw; }
   img { max-width: 100%; height: auto; }
@@ -142,8 +143,8 @@ html, body { overflow-x: hidden; }
   .home-logo img { width: 64px; }
   .cursive-glow { padding-top: 56px; }
   .simple-dropdown select { font-size: 14px; padding: 8px 10px; }
-  .floating-gallery figure { width: 36vw; }
-  .floating-gallery figure.big-figure { width: 44vw; }
+  .floating-gallery figure { width: 54vw; } /* Aumentado de 36vw a 54vw (50% más grande) */
+  .floating-gallery figure.big-figure { width: 66vw; } /* Aumentado de 44vw a 66vw (50% más grande) */
 }
 
 /* Home specific mobile background zoom */
@@ -180,6 +181,7 @@ html, body { overflow-x: hidden; }
   .content-box {
     margin: 20px 15px;
     padding: 20px 15px;
+    transform: translateX(-38px);
   }
 
   .content-box h1 {
@@ -202,11 +204,11 @@ html, body { overflow-x: hidden; }
   }
   
   .floating-gallery figure { 
-    width: 30vw; /* Reducido de 50vw a 30vw */
+    width: 45vw; /* Aumentado de 30vw a 45vw (50% más grande) */
   }
   
   .floating-gallery figure.big-figure { 
-    width: 35vw; /* Reducido de 60vw a 35vw */
+    width: 52.5vw; /* Aumentado de 35vw a 52.5vw (50% más grande) */
   }
 
   .floating-gallery figure {
@@ -239,6 +241,7 @@ html, body { overflow-x: hidden; }
   .checklist label {
     font-size: 0.9rem;
     margin: 8px 0;
+    padding-left: 8px; /* Añadir más espacio entre checkbox y texto */
   }
 
   .song-select {

@@ -26,12 +26,14 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: react-app/package-lock.json
       
       - name: Install dependencies
+        working-directory: react-app
         run: npm ci
       
       - name: Build
+        working-directory: react-app
         run: npm run build
       
       - name: Setup Pages
@@ -40,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: react-app/dist
 
   deploy:
     environment:
@@ -51,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4 

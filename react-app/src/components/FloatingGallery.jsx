@@ -15,34 +15,45 @@ export default function FloatingGallery({ items }) {
       const figures = gallery.querySelectorAll('figure')
       const positions = []
       const isMobile = window.innerWidth <= 768
-      const minDistance = isMobile ? 120 : 160
+      const minDistance = isMobile ? 120 : 160 // más separación en móvil
+      
+      // Altura extra en móvil para distribuir mejor verticalmente
       const viewportH = window.innerHeight
       const canvasH = isMobile ? Math.round(viewportH * 1.1) : viewportH
       gallery.style.height = `${canvasH}px`
-
+      
       figures.forEach((fig) => {
         const isBig = fig.classList.contains('big-figure')
         const approxWidth = isBig ? 350 : 250
         const safeMargin = isMobile ? 40 : 80
         const maxX = Math.max(0, window.innerWidth - approxWidth - safeMargin)
-        const maxY = Math.max(0, canvasH - 300)
-
+        const maxY = Math.max(0, canvasH - 300) // rango vertical ampliado
+        
         let attempts = 0
         let validPosition = false
         let left, top
-
-        while (!validPosition && attempts < 200) {
+        
+        // Intentar encontrar una posición válida que no esté muy cerca de otras
+        while (!validPosition && attempts < 200) { // más intentos
           left = Math.random() * maxX
           top = Math.random() * maxY
+          
+          // Verificar que esté a una distancia mínima de otras imágenes
           validPosition = positions.every(pos => {
-            const distance = Math.hypot(left - pos.left, top - pos.top)
+            const distance = Math.sqrt(
+              Math.pow(left - pos.left, 2) + Math.pow(top - pos.top, 2)
+            )
             return distance >= minDistance
           })
+          
           attempts++
         }
-
+        
+        // Si no se encontró posición válida, usar la última generada
         fig.style.left = `${Math.max(safeMargin, Math.min(left, maxX))}px`
         fig.style.top = `${Math.max(safeMargin, Math.min(top, maxY))}px`
+        
+        // Guardar la posición para futuras verificaciones
         positions.push({ left, top })
       })
     }
@@ -129,6 +140,7 @@ export default function FloatingGallery({ items }) {
     }
   }, [])
 
+  // tamaños responsive usando clamp para móvil/desktop
   const figStyle = { position: 'absolute', width: 'clamp(120px, 28vw, 250px)', margin: 0, cursor: 'grab', userSelect: 'none' }
   const bigStyle = { ...figStyle, width: 'clamp(150px, 34vw, 350px)' }
   const imgStyle = { width: '100%', height: 'auto', display: 'block', pointerEvents: 'none' }
@@ -144,7 +156,9 @@ export default function FloatingGallery({ items }) {
 
   const renderItems = (items && items.length ? items : defaultItems)
 
+  // altura del contenedor: más alta en móvil
   const isMobileRender = typeof window !== 'undefined' && window.innerWidth <= 768
+
   return (
     <div
       className="floating-gallery"

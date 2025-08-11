@@ -72,7 +72,8 @@ export default function Flies({ enabled = true, activateOnClick = false }) {
         destroyFlies()
       }
     } else {
-      start()
+      // Iniciar inmediatamente después de crear las moscas
+      setTimeout(() => start(), 100) // Pequeño delay para asegurar que las moscas estén en el DOM
       return () => destroyFlies()
     }
   }, [enabled, activateOnClick])

@@ -11,8 +11,8 @@ This directory contains CSV templates for setting up Google Sheets as a headless
 
 ### 2. **page2_topographie_etrange.csv**
 - **Page**: Topographie de l'étrange
-- **Content**: Floating gallery with 4 draggable images
-- **Columns**: title, image_url, caption, position_x, position_y, size
+- **Content**: Floating gallery with 4 draggable images (positions generated randomly)
+- **Columns**: title, image_url, caption, size
 
 ### 3. **page3_reliques_reve.csv**
 - **Page**: Reliques du rêve
@@ -21,25 +21,19 @@ This directory contains CSV templates for setting up Google Sheets as a headless
 
 ### 4. **page4_memoires_mont_songe.csv**
 - **Page**: Mémoires du Mont Songe
-- **Content**: Complete text content with all sections
-- **Columns**: title, content, date, image_url
-
-### 5. **general_config.csv**
-- **Purpose**: Global website configuration
-- **Content**: Site settings, images, and audio files
-- **Columns**: setting, value, description
+- **Content**: Two text sections - introductory quote and main content
+- **Columns**: text_type, content
 
 ## Setup Instructions
 
 ### Step 1: Create Google Sheets
 1. Go to [Google Sheets](https://sheets.google.com)
 2. Create a new spreadsheet
-3. Create **5 sheets** with these exact names:
+3. Create **4 sheets** with these exact names:
    - `page1_je_mappelle_aurore`
    - `page2_topographie_etrange`
    - `page3_reliques_reve`
    - `page4_memoires_mont_songe`
-   - `general_config`
 
 ### Step 2: Import CSV Data
 1. Open each sheet
@@ -73,15 +67,19 @@ Once set up, you can:
 - **Edit text content** directly in Google Sheets
 - **Update images** by changing URLs in the sheets
 - **Modify form labels** and descriptions
-- **Change audio file references**
-- **Update site configuration**
+- **Change image captions** and sizes
 
 All changes will be reflected on the website after refreshing (with 5-minute cache).
+
+## Special Features
+
+- **Page 2**: Images are positioned randomly on each page load for dynamic layout
+- **Page 4**: Content is split into two main sections for easy editing
+- **Caching**: Data is cached for 5 minutes to reduce API calls
 
 ## Notes
 
 - **Images**: Use Google Drive direct links or relative paths
-- **Audio**: Use relative paths from the audio/ directory
 - **Text**: Supports line breaks and special characters
 - **Cache**: Data is cached for 5 minutes to reduce API calls
 - **Security**: API key should be restricted to your domain only 
