@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurore Delune</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,17 +41,50 @@
       <div class="content-box">
         <div class="main-content">
           <h1>Topographie de l'étrange</h1>
-          <h2 style="margin-bottom: 100px">
-            Du sacré dans le profane, de la beauté dans la décrépitude
-          </h2>
+          <div class="type-container">
+            <h2
+              class="type-h2"
+              data-text="Du sacré dans le profane, de la beauté dans la décrépitude"
+            ></h2>
+
+            <script>
+              (function () {
+                function typeOut(el, text, speed = 50, startDelay = 300) {
+                  if (!el) return;
+                  el.textContent = "";
+                  let i = 0;
+                  setTimeout(function type() {
+                    if (i < text.length) {
+                      el.textContent += text[i++];
+                      setTimeout(type, speed);
+                    }
+                  }, startDelay);
+                }
+
+                // Run after the page is fully ready (avoids race with other DOMContentLoaded handlers)
+                window.addEventListener("load", () => {
+                  const el = document.getElementById("type-h2");
+                  if (!el) return;
+                  const text = el.dataset.text || el.textContent || "";
+                  typeOut(el, text);
+                });
+              })();
+            </script>
+          </div>
 
           <style>
             .floating-gallery {
               position: relative;
               width: 100%;
-              height: 100vh;
+              height: 160vh;
               overflow: hidden;
               cursor: grab;
+            }
+
+            @media (max-width: 768px) {
+              .floating-gallery {
+                height: 180vh; /* extra tall on small screens */
+              }
             }
 
             .floating-gallery figure {
@@ -122,36 +156,90 @@
             let offsetX = 0;
             let offsetY = 0;
 
-            gallery.addEventListener("mousedown", (e) => {
-              const fig = e.target.closest("figure");
+            // For smooth animations
+            let currentX = 0;
+            let currentY = 0;
+            let targetX = 0;
+            let targetY = 0;
+            let animationFrameId;
+
+            function startDrag(e) {
+              const isTouch = e.type.startsWith("touch");
+              const pointer = isTouch ? e.touches[0] : e;
+
+              const fig = document
+                .elementFromPoint(pointer.clientX, pointer.clientY)
+                ?.closest("figure");
               if (!fig) return;
+
               draggingFigure = fig;
               const rect = fig.getBoundingClientRect();
-              offsetX = e.clientX - rect.left;
-              offsetY = e.clientY - rect.top;
+              const galleryRect = gallery.getBoundingClientRect(); // <-- get gallery position
+
+              offsetX = pointer.clientX - rect.left;
+              offsetY = pointer.clientY - rect.top;
               fig.style.cursor = "grabbing";
-            });
 
-            gallery.addEventListener("mousemove", (e) => {
+              // Make target position relative to gallery
+              targetX = rect.left - galleryRect.left;
+              targetY = rect.top - galleryRect.top;
+              currentX = targetX;
+              currentY = targetY;
+
+              if (isTouch) {
+                document.addEventListener("touchmove", onDrag, {
+                  passive: false,
+                });
+                document.addEventListener("touchend", endDrag);
+              } else {
+                document.addEventListener("mousemove", onDrag);
+                document.addEventListener("mouseup", endDrag);
+              }
+
+              animate();
+            }
+
+            function onDrag(e) {
               if (!draggingFigure) return;
-              const x = e.clientX - offsetX;
-              const y = e.clientY - offsetY;
-              draggingFigure.style.left = `${x}px`;
-              draggingFigure.style.top = `${y}px`;
-            });
 
-            gallery.addEventListener("mouseup", () => {
+              const isTouch = e.type.startsWith("touch");
+              const pointer = isTouch ? e.touches[0] : e;
+
+              const galleryRect = gallery.getBoundingClientRect();
+              targetX = pointer.clientX - galleryRect.left - offsetX;
+              targetY = pointer.clientY - galleryRect.top - offsetY;
+
+              if (isTouch) e.preventDefault(); // stop page scroll while dragging
+            }
+
+            function animate() {
+              if (!draggingFigure) return; // stop if no figure is being dragged
+
+              // Smooth easing
+              currentX += (targetX - currentX) * 0.2;
+              currentY += (targetY - currentY) * 0.2;
+
+              draggingFigure.style.left = `${currentX}px`;
+              draggingFigure.style.top = `${currentY}px`;
+
+              animationFrameId = requestAnimationFrame(animate);
+            }
+
+            function endDrag() {
               if (draggingFigure) {
                 draggingFigure.style.cursor = "grab";
                 draggingFigure = null;
               }
-            });
+              cancelAnimationFrame(animationFrameId);
+              document.removeEventListener("mousemove", onDrag);
+              document.removeEventListener("mouseup", endDrag);
+              document.removeEventListener("touchmove", onDrag);
+              document.removeEventListener("touchend", endDrag);
+            }
 
-            gallery.addEventListener("mouseleave", () => {
-              if (draggingFigure) {
-                draggingFigure.style.cursor = "grab";
-                draggingFigure = null;
-              }
+            gallery.addEventListener("mousedown", startDrag);
+            gallery.addEventListener("touchstart", startDrag, {
+              passive: false,
             });
           </script>
         </div>

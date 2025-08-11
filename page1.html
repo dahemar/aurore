@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurore Delune</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,9 +17,13 @@
     <link rel="stylesheet" type="text/css" href="./style.css" />
   </head>
 
-  <body>
-   <audio id="audio-player" controls style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></audio>
-   <audio id="sfx-player"></audio>
+  <body class="page1">
+    <audio
+      id="audio-player"
+      controls
+      style="position: fixed; bottom: 20px; right: 20px; z-index: 1000"
+    ></audio>
+    <audio id="sfx-player"></audio>
 
     <div class="container cursive-glow">
       <nav class="sidebar">
@@ -35,25 +40,45 @@
       <div class="main-column">
         <div class="content-box">
           <h1>Je m'appelle Aurore Delune</h1>
-          <h2>Comment t'appelles-tu ?</h2>
+          <h2>Comment vous appelez-vous ?</h2>
 
-          <form
-            action="mailto:dawn.ng@outlook.com"
-            method="post"
-            enctype="text/plain"
-          >
-            <label for="name">Your name:</label><br />
+          <form id="contactForm">
+            <label for="name">Votre nom :</label><br />
             <input type="text" id="name" name="name" required /><br /><br />
 
-            <label for="email">Your email:</label><br />
+            <label for="email">Votre email :</label><br />
             <input type="email" id="email" name="email" required /><br /><br />
 
-            <label for="message">Your message:</label><br />
+            <label for="message">Votre message:</label><br />
             <textarea id="message" name="message" rows="5" required></textarea
             ><br /><br />
 
-            <button type="submit">Send</button>
+            <button type="submit">Envoyer</button>
           </form>
+
+          <script>
+            document
+              .getElementById("contactForm")
+              .addEventListener("submit", function (event) {
+                event.preventDefault(); // stop normal form submission
+
+                // Get form values
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const message = document.getElementById("message").value.trim();
+
+                // Build nicely formatted email body
+                const body = `${name}\n${email}\n\n${message}`;
+
+                // Create mailto link
+                const mailtoLink = `mailto:dawn.ng@outlook.com?subject=Website%20Contact&body=${encodeURIComponent(
+                  body
+                )}`;
+
+                // Redirect to the mailto link
+                window.location.href = mailtoLink;
+              });
+          </script>
         </div>
 
         <img
@@ -141,26 +166,26 @@
     <script src="script.js"></script>
 
     <script>
-  const audioPlayer = document.getElementById('audio-player');
-  const dropdown = document.getElementById('tech-select');
+      const audioPlayer = document.getElementById("audio-player");
+      const dropdown = document.getElementById("tech-select");
 
-  dropdown.addEventListener('change', () => {
-    const selected = dropdown.value;
-    if (selected) {
-      audioPlayer.src = selected;
-      audioPlayer.play().catch(err => {
-        console.warn("Autoplay failed:", err);
+      dropdown.addEventListener("change", () => {
+        const selected = dropdown.value;
+        if (selected) {
+          audioPlayer.src = selected;
+          audioPlayer.play().catch((err) => {
+            console.warn("Autoplay failed:", err);
+          });
+        }
       });
-    }
-  });
 
-  // Optional: preload first song if desired
-  window.addEventListener('DOMContentLoaded', () => {
-    if (dropdown.value) {
-      audioPlayer.src = dropdown.value;
-    }
-  });
-</script>
+      // Optional: preload first song if desired
+      window.addEventListener("DOMContentLoaded", () => {
+        if (dropdown.value) {
+          audioPlayer.src = dropdown.value;
+        }
+      });
+    </script>
 
     <script>
       const path = window.location.pathname;

@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurore Delune</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,10 +18,14 @@
   </head>
 
   <body>
-<audio id="audio-player" controls style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></audio>
-<audio id="sfx-player"></audio>
+    <audio
+      id="audio-player"
+      controls
+      style="position: fixed; bottom: 20px; right: 20px; z-index: 1000"
+    ></audio>
+    <audio id="sfx-player"></audio>
 
-<div class="container cursive-glow">
+    <div class="container cursive-glow">
       <nav class="sidebar">
         <a href="index.html" class="home-logo start-audio">
           <img src="images/orchidd.jpg" alt="Home" />
@@ -33,14 +38,45 @@
         </ul> -->
       </nav>
       <div class="content-box">
+        <div class="main-content">
+          <h1>Reliques du rêve</h1>
+          <div class="type-container">
+  <h2 class="type-h2"
+              data-text="A la lisière du rêve et du mythe, de l'humain et de l'autre"
+            </h2>
+            
+              <script>
+(function () {
+  function typeOut(el, text, speed=50, startDelay=300) {
+    if (!el) return;
+    el.textContent = "";
+    let i = 0;
+    setTimeout(function type() {
+      if (i < text.length) {
+        el.textContent += text[i++];
+        setTimeout(type, speed);
+      }
+    }, startDelay);
+  }
 
-      <div class="main-content">
-        <h1>Reliques du rêve</h1>
-        <h2 style="margin-bottom: 100px;">A la lisière du rêve et du mythe, de l'humain et de l'autre</h2>
-        
-        <img src="images/P1082181.jpg" height="600" style="margin: 5px;">
-         </div>
-         <div class="checklist">
+  // Run after the page is fully ready (avoids race with other DOMContentLoaded handlers)
+  window.addEventListener("load", () => {
+    const el = document.getElementById("type-h2");
+    if (!el) return;
+    const text = el.dataset.text || el.textContent || "";
+    typeOut(el, text);
+  });
+})();
+</script>
+          </div>
+
+          <img
+            src="images/P1082181.JPG"
+            height="600"
+            style="margin: 40px 5px 5px 5px"
+          />
+        </div>
+        <div class="checklist">
           <ul>
             <li>
               <input type="checkbox" id="item1" />
@@ -117,51 +153,51 @@
       </div>
     </div>
     <script src="script.js"></script>
-  
-<script>
-  const audioPlayer = document.getElementById('audio-player');
-  const dropdown = document.getElementById('tech-select');
-
-  dropdown.addEventListener('change', () => {
-    const selected = dropdown.value;
-    if (selected) {
-      audioPlayer.src = selected;
-      audioPlayer.play().catch(err => {
-        console.warn("Autoplay failed:", err);
-      });
-    }
-  });
-
-  // Optional: preload first song if desired
-  window.addEventListener('DOMContentLoaded', () => {
-    if (dropdown.value) {
-      audioPlayer.src = dropdown.value;
-    }
-  });
-</script>
 
     <script>
-       const path = window.location.pathname;
+      const audioPlayer = document.getElementById("audio-player");
+      const dropdown = document.getElementById("tech-select");
 
-  // Normalize path to just the filename (e.g. "page1.html")
-  const filename = path.substring(path.lastIndexOf("/") + 1);
+      dropdown.addEventListener("change", () => {
+        const selected = dropdown.value;
+        if (selected) {
+          audioPlayer.src = selected;
+          audioPlayer.play().catch((err) => {
+            console.warn("Autoplay failed:", err);
+          });
+        }
+      });
 
-  // Map filenames to checkbox IDs
-  const pageToCheckbox = {
-    "page1.html": "item1",
-    "page2.html": "item2",
-    "page3.html": "item3",
-    "page4.html": "item4",
-  };
-
-  // If match found, check the corresponding box
-  const checkboxId = pageToCheckbox[filename];
-  if (checkboxId) {
-    const checkbox = document.getElementById(checkboxId);
-    if (checkbox) {
-      checkbox.checked = true;
-    }
-  }
+      // Optional: preload first song if desired
+      window.addEventListener("DOMContentLoaded", () => {
+        if (dropdown.value) {
+          audioPlayer.src = dropdown.value;
+        }
+      });
     </script>
-</body>
+
+    <script>
+      const path = window.location.pathname;
+
+      // Normalize path to just the filename (e.g. "page1.html")
+      const filename = path.substring(path.lastIndexOf("/") + 1);
+
+      // Map filenames to checkbox IDs
+      const pageToCheckbox = {
+        "page1.html": "item1",
+        "page2.html": "item2",
+        "page3.html": "item3",
+        "page4.html": "item4",
+      };
+
+      // If match found, check the corresponding box
+      const checkboxId = pageToCheckbox[filename];
+      if (checkboxId) {
+        const checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+          checkbox.checked = true;
+        }
+      }
+    </script>
+  </body>
 </html>
